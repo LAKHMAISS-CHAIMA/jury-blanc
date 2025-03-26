@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
- 
+const mongoose = require('mongoose');
+
 const ProjectSchema = mongoose.Schema({
   name: {
     type: String,
@@ -11,7 +11,7 @@ const ProjectSchema = mongoose.Schema({
   },
   startDate: {
     type: Date,
-    required: true,  
+    required: true,
   },
   endDate: {
     type: Date,
@@ -21,10 +21,8 @@ const ProjectSchema = mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Task",
-    },
-  ],
+    }
+  ]
 });
 
-const projectModel = mongoose.model("Project", ProjectSchema);
-
-module.exports = projectModel;
+module.exports = mongoose.model('Project', ProjectSchema);

@@ -34,8 +34,8 @@ export default function EditTask() {
   const loadTask = async () => {
     try {
       const response = await getTask(id);
-      console.log('Raw response from getTask:', response); // تسجيل الاستجابة الكاملة
-      const task = response; // تعديل بناءً على هيكل الاستجابة
+      console.log('Raw response from getTask:', response); 
+      const task = response; 
       if (!task) {
         throw new Error('Task not found');
       }
@@ -50,7 +50,7 @@ export default function EditTask() {
     } catch (error) {
       console.error('Error loading task:', error);
       toast.error('Failed to load task');
-      navigate('/projects'); // إعادة توجيه إذا فشل التحميل
+      navigate('/projects'); 
     } finally {
       setLoading(false);
     }

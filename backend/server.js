@@ -8,7 +8,7 @@ require('dotenv').config()
 
 const app = express()
 const PORT = process.env.PORT || 7000
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/construction'
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/projects'
 
 app.use(cors())
 app.use(express.json())

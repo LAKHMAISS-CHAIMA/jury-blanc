@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import * as yup from 'yup';
 import { getProject, updateProject } from '../api/projects';
+import axios from 'axios';
 
 const schema = yup.object().shape({
   name: yup.string().required('Project name is required'),
@@ -13,7 +14,8 @@ const schema = yup.object().shape({
 });
 
 export default function EditProject() {
-  const { id } = useParams();
+  
+  const { projectId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -23,43 +25,45 @@ export default function EditProject() {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [project, setProject] = useState(null)
+  
   useEffect(() => {
     loadProject();
-  }, [id]);
-
+  }, [projectId]);
+  
   const loadProject = async () => {
     try {
-      const response = await getProject(id);
-      const project = response.data;
-      console.log('Project loaded:', project); // تسجيل للتحقق
+      console.log(projectId)
+      const response = await axios.get(`http://localhost:7000/api/projects/${projectId}`);
+      setProject(response.data);
+      console.log('Project loaded:', response.data); 
       setFormData({
-        name: project.name || '',
-        description: project.description || '',
-        startDate: project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : '',
-        endDate: project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : '',
+        name: project?.name || '',
+        description: project?.description || '',
+        startDate: project?.startDate ? new Date(project.startDate).toISOString() : '',
+        endDate: project?.endDate ? new Date(project.endDate).toISOString() : '',
       });
     } catch (error) {
-      console.error('Error loading project:', error); // تسجيل الخطأ
+      console.error('Error loading project:', error);
       toast.error('Failed to load project');
     } finally {
       setLoading(false);
     }
   };
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await schema.validate(formData, { abortEarly: false });
-      await updateProject(id, formData);
+      await updateProject(projectId, formData);
       toast.success('Project updated successfully');
-      navigate(`/projects/${id}`);
+      navigate(`/projects`);
     } catch (error) {
       if (error instanceof yup.ValidationError) {
         const validationErrors = {};
@@ -73,7 +77,7 @@ export default function EditProject() {
       }
     }
   };
-
+  
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -85,7 +89,7 @@ export default function EditProject() {
   return (
     <div>
       <div className="flex items-center mb-6">
-        <Link to={`/projects/${id}`} className="text-amber-600 hover:text-amber-700 mr-4">
+        <Link to={`/projects/${projectId}`} className="text-amber-600 hover:text-amber-700 mr-4">
           <ArrowLeft className="h-6 w-6" />
         </Link>
         <h1 className="text-3xl font-bold text-amber-900">Edit Project</h1>
@@ -154,7 +158,7 @@ export default function EditProject() {
         </div>
 
         <div className="flex justify-end space-x-3">
-          <Link to={`/projects/${id}`} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
+          <Link to={`/projects/${projectId}`} className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50">
             Cancel
           </Link>
           <button

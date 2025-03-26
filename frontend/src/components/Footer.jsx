@@ -1,11 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-function Footer() {
+export default function Footer() {
   return (
-    <div className="bg-blue-800 text-white py-4 text-center">
-      <p>&copy; {new Date().getFullYear()} BuildTrack Pro. Tous droits réservés.</p>
-    </div>
-  )
+    <footer className="bg-amber-800 text-white py-4 text-center">
+      <p>&copy; {new Date().getFullYear()} ConstructionXpert. All rights reserved.</p>
+    </footer>
+  );
 }
-
-export default Footer

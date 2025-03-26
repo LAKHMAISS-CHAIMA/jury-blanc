@@ -7,9 +7,9 @@ export const getProjects = async () => {
   return { data: response.data || [] }; 
 };
 
-export const getProject = async (id) => {
+export const getProject = async (projectId) => {
   try {
-    const response = await axios.get(`${API_URL}/projects/${id}`);
+    const response = await axios.get(`${API_URL}/projects/${projectId}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching project details:", error);
